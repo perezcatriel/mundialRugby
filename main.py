@@ -6,12 +6,15 @@ def ingresar_partido(paises_participantes):
         equipo_local = input("Equipo local: ")
         equipo_visitante = input("Equipo visitante: ")
 
-        if equipo_local in paises_participantes and equipo_visitante in paises_participantes:
+        if any(
+                pais["pais"] == equipo_local for pais in paises_participantes
+                ) and any(
+                pais["pais"] == equipo_visitante for pais in
+                paises_participantes
+                ):
             break
         else:
-            print(
-                    "Al menos uno de los equipos no es un país participante. Ingresa equipos válidos."
-                    )
+            print("Al menos uno de los equipos no es un país participante. Ingresa equipos válidos.")
 
     puntos_local = input("Puntos del equipo local: ")
     puntos_visitante = input("Puntos del equipo visitante: ")
@@ -25,7 +28,7 @@ def ingresar_partido(paises_participantes):
         "puntos_visitante": puntos_visitante,
         "fecha": fecha,
         "zona": zona,
-        }
+    }
 
     return partido
 
@@ -55,32 +58,36 @@ def mostrar_partidos(nombre_archivo):
             print(f"Zona: {row['zona']}")
             print()
 
+def mostrar_paises_puntajes(paises_participantes):
+    for pais in paises_participantes:
+        print(f"Pais: {pais['pais']}, Score: {pais['score']} puntos")
+
 
 def cargar_paises_participantes(nombre_archivo):
-    paises_participantes = {}
+    paises_participantes = []
     with open(nombre_archivo, mode='r', newline='') as file:
         reader = csv.DictReader(file)
         for row in reader:
             zona = row['zona']
             pais = row['pais']
             score = float(row['score'])
-            if zona not in paises_participantes:
-                paises_participantes[zona] = []
-            paises_participantes[zona].append({"pais": pais, "score": score})
+            paises_participantes.append({"zona": zona, "pais": pais, "score": score})
     return paises_participantes
 
 
+
 if __name__ == "__main__":
-    nombre_archivo_csv = "partidos.csv"
+    nombre_archivo_csv = "./data/partidos.csv"
     encabezados = ["equipo_local", "equipo_visitante", "puntos_local",
                    "puntos_visitante", "fecha", "zona"]
 
-    nombre_archivo_paises = "paises.csv"
+    nombre_archivo_paises = "./data/paises.csv"
     paises_participantes = cargar_paises_participantes(nombre_archivo_paises)
 
     while True:
         opcion = input(
-                "1. Ingresar partido\n2. Mostrar partidos\n3. "
+                "1. Ingresar partido\n2. Mostrar partidos\n3. Mostrar "
+                "todos los paises y scores\n4. "
                 "Salir\nSeleccione una opcion: "
                 )
         if opcion == "1":
@@ -90,10 +97,7 @@ if __name__ == "__main__":
             mostrar_partidos(nombre_archivo_csv)
             print("Puntajes de los equipos por zona:")
         elif opcion == "3":
-            for zona, equipos in paises_participantes.items():
-                print(f"Zona {zona}:")
-                for equipo in equipos:
-                    print(f"{equipo['pais']}: {equipo['score']} puntos")
+            mostrar_paises_puntajes(paises_participantes)
         elif opcion == "4":
             break
         else:
