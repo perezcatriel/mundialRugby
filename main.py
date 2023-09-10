@@ -22,8 +22,8 @@ def ingresar_partido(paises_participantes):
     nuevo_id = obtener_nuevo_id(nombre_archivo_csv)
 
     while True:
-        equipo_local = input("Equipo local: ").capitalize()
-        equipo_visitante = input("Equipo visitante: ").capitalize()
+        equipo_local = input("Equipo local: ").title()
+        equipo_visitante = input("Equipo visitante: ").title()
 
         if any(pais["pais"] == equipo_local for pais in paises_participantes) and any(
                 pais["pais"] == equipo_visitante for pais in paises_participantes):
@@ -50,7 +50,7 @@ def ingresar_partido(paises_participantes):
         except ValueError:
             print("Ingresa una fecha válida en formato DD/MM/AAAA")
 
-    zona = input("Zona: ").capitalize()
+    zona = input("Zona: ").title()
 
     partido = {
         "ID": nuevo_id,  # Asignar el nuevo ID automático
@@ -74,8 +74,8 @@ def modificar_partido(partidos):
     partido_id = int(input("Ingrese el ID del partido que desea modificar: "))
     for partido in partidos:
         if int(partido["ID"]) == partido_id:
-            equipo_local = input("Nuevo equipo local: ").capitalize()
-            equipo_visitante = input("Nuevo equipo visitante: ").capitalize()
+            equipo_local = input("Nuevo equipo local: ").title()
+            equipo_visitante = input("Nuevo equipo visitante: ").title()
             puntos_local = int(input("Nuevos puntos del equipo local: "))
             puntos_visitante = int(input("Nuevos puntos del equipo visitante: "))
             fecha_str = input("Nueva fecha del partido (formato DD/MM/AAAA): ")
@@ -84,7 +84,7 @@ def modificar_partido(partidos):
             except ValueError:
                 print("Ingresa una fecha válida en formato DD/MM/AAAA.")
                 return
-            zona = input("Nueva zona: ").capitalize()
+            zona = input("Nueva zona: ").title()
 
             partido["equipo_local"] = equipo_local
             partido["equipo_visitante"] = equipo_visitante
